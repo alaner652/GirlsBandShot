@@ -1,0 +1,17 @@
+ocr:
+  languages: ["ch_tra", "en"]
+  confidence_threshold: 0.7
+  subtitle_region:
+    top: 0.885
+    bottom: 0.955
+
+extraction:
+  coarse_step: 15        # 粗掃步距（幀）
+  similarity_threshold: 0.2
+  max_repeats: 3
+
+image:
+  resolution: [1920, 1080]
+
+supabase:
+  bucket: "frames"

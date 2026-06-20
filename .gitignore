@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# Large files / runtime data (not tracked)
+extractor/videos/
+extractor/output/
+extractor/logs/
+extractor/nohup.out
+web/data/*/videos/
+
+# Node
+web/node_modules/
+web/.pnp
+web/.pnp.*
+web/.yarn/*
+!web/.yarn/patches
+!web/.yarn/plugins
+!web/.yarn/releases
+!web/.yarn/versions
+web/coverage/
+web/.next/
+web/out/
+web/build/
+web/.vercel/
+web/*.tsbuildinfo
+web/next-env.d.ts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.pem
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Node
+node_modules/
+web/.next/
+web/out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Old projects (archived, not part of new structure)
+ave-mujica-api/
+Ave-Mujica-Bot/
+ave-mujica-subtitle-extractor/

@@ -1,0 +1,6 @@
+.venv
+videos
+output
+__pycache__
+*.pyc
+.env

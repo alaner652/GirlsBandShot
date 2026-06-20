@@ -1,0 +1,14 @@
+services:
+  extractor:
+    build: .
+    env_file: .env
+    volumes:
+      - ./videos:/app/videos
+      - ./output:/app/output
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

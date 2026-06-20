@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ave-mujica-extractor"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "easyocr",
+    "ffmpeg-python",
+    "Pillow",
+    "torch",
+    "numpy",
+    "yt-dlp",
+    "typer",
+    "rich",
+    "supabase",
+    "python-dotenv",
+    "pyyaml",
+]
+
+[project.scripts]
+extractor = "extractor.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/extractor"]
