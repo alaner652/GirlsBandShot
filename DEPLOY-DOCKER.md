@@ -58,11 +58,29 @@ docker compose restart
 
 # 停止服務
 docker compose down
+```
 
-# 更新專案
+### 更新專案（保留影片）
+
+```bash
+# 使用自動更新腳本（推薦）
+./update.sh
+```
+
+腳本會自動：
+1. ✅ 檢查未提交的變更
+2. ✅ 確認影片目錄被保護
+3. ✅ 拉取最新代碼（`git pull`）
+4. ✅ 重建並重啟容器
+5. ✅ 驗證影片檔案完好
+
+**手動更新**：
+```bash
 git pull
 docker compose up -d --build
 ```
+
+💡 **注意**：影片檔案在 `web/data/*/videos/` 已被 `.gitignore` 排除，執行 `git pull` 時不會被刪除。
 
 ---
 
@@ -85,22 +103,44 @@ docker compose restart
 
 ---
 
-## 使用 Nginx 反向代理
+## 使用 Nginx 反向代理（可選）
 
-### 1. 安裝 Nginx
+如果需要：
+- 使用 80/443 port（不用加 :3000）
+- 綁定域名
+- 設定 HTTPS/SSL
+
+### 自動設定（推薦）
 
 ```bash
-sudo apt install -y nginx certbot python3-certbot-nginx
+# 在 VM 上執行
+sudo ./setup-nginx.sh
 ```
 
-### 2. 設定 Nginx
+腳本會自動：
+1. ✅ 安裝 Nginx
+2. ✅ 建立反向代理設定
+3. ✅ 詢問是否設定 SSL（Let's Encrypt）
+4. ✅ 重啟服務
 
-建立 `/etc/nginx/sites-available/girlsbandshot`：
+### 手動設定
 
+<details>
+<summary>展開查看手動設定步驟</summary>
+
+```bash
+# 1. 安裝 Nginx
+sudo apt install -y nginx
+
+# 2. 建立設定檔
+sudo nano /etc/nginx/sites-available/girlsbandshot
+```
+
+內容：
 ```nginx
 server {
     listen 80;
-    server_name your-domain.com;
+    server_name your-domain.com;  # 或使用 _（任意 IP/域名）
 
     location / {
         proxy_pass http://localhost:3000;
@@ -114,16 +154,16 @@ server {
 ```
 
 ```bash
+# 3. 啟用設定
 sudo ln -s /etc/nginx/sites-available/girlsbandshot /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
-```
 
-### 3. 設定 SSL
-
-```bash
+# 4. 設定 SSL（可選）
+sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d your-domain.com
 ```
+</details>
 
 ---
 
