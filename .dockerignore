@@ -1,0 +1,11 @@
+web/node_modules
+web/.next
+web/.env.local
+web/data
+.git
+.gitignore
+*.md
+deploy-web.sh
+install-systemd.sh
+avemujica-web.service
+extractor

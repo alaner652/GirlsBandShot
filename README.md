@@ -1,11 +1,11 @@
-# 雞狗查圖
+# 雞狗查圖 GirlsBandShot
 
 字幕截圖搜尋。輸入一句台詞，找到那個畫面，即時生成截圖或 GIF。
 
 ## 架構
 
 ```
-AveMujicaBot/
+GirlsBandShot/
 ├── extractor/      # Python — OCR 掃描字幕、寫入 SQLite
 └── web/            # Next.js — 搜尋 UI + 即時截圖/GIF API
     └── data/       # 執行時資料（不進 git）
@@ -103,27 +103,20 @@ npm start   # 預設 port 3000
 影片放到 `web/data/ave-mujica/videos/` 後截圖/GIF 才會有效。
 伺服器需安裝 ffmpeg（`apt install ffmpeg` / `brew install ffmpeg`）。
 
-### Docker
-
-```dockerfile
-FROM node:22-alpine
-RUN apk add --no-cache ffmpeg
-WORKDIR /app
-COPY web/package*.json ./
-RUN npm ci
-COPY web/ .
-RUN npm run build
-ENV DATA_BASE=./data
-EXPOSE 3000
-CMD ["npm", "start"]
-```
+### Docker（推薦）
 
 ```bash
-docker build -f Dockerfile.web -t jigou .
-docker run -p 3000:3000 \
-  -v $(pwd)/web/data:/app/data \
-  jigou
+# 一鍵啟動
+docker compose up -d
+
+# 查看日誌
+docker compose logs -f
+
+# 停止
+docker compose down
 ```
+
+影片放到 `web/data/ave-mujica/videos/` 後重啟即可。
 
 ### Vercel（僅搜尋）
 
