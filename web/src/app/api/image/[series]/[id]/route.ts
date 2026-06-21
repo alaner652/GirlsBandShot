@@ -9,7 +9,8 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ series: string; id: string }> }
 ) {
-  const { series, id } = await params;
+  const { series, id: rawId } = await params;
+  const id = rawId.replace(/\.(png|jpg|jpeg)$/, "");
   const cacheKey = `image:${series}:${id}`;
 
   let buf = mediaCache.get(cacheKey);
@@ -26,7 +27,7 @@ export async function GET(
 
   return new Response(new Uint8Array(buf), {
     headers: {
-      "Content-Type": "image/png",
+      "Content-Type": "image/jpeg",
       "Cache-Control": "public, max-age=86400",
     },
   });

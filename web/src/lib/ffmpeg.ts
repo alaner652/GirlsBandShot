@@ -21,7 +21,8 @@ export async function extractFrame(videoPath: string, series: string, seconds: n
       "-vframes", "1",
       "-vf", "scale=1920:1080",
       "-f", "image2",
-      "-vcodec", "png",
+      "-vcodec", "mjpeg",
+      "-q:v", "3",
       "pipe:1",
     ],
     { encoding: "buffer", maxBuffer: 20 * 1024 * 1024 }
