@@ -44,7 +44,6 @@ docker compose up -d
 完成！開啟 `http://your-server-ip:3000`
 
 ---
-
 ## 管理指令
 
 ```bash
@@ -76,7 +75,7 @@ docker compose up -d --build
 mkdir -p web/data/ave-mujica/videos
 
 # 從本機上傳
-scp video.mp4 user@server:~/AveMujicaBot/web/data/ave-mujica/videos/
+scp video.mp4 user@server:~/GirlsBandShot/web/data/ave-mujica/videos/
 
 # 重啟服務
 docker compose restart
@@ -96,7 +95,7 @@ sudo apt install -y nginx certbot python3-certbot-nginx
 
 ### 2. 設定 Nginx
 
-建立 `/etc/nginx/sites-available/avemujica`：
+建立 `/etc/nginx/sites-available/girlsbandshot`：
 
 ```nginx
 server {
@@ -115,7 +114,7 @@ server {
 ```
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/avemujica /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/girlsbandshot /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
 ```

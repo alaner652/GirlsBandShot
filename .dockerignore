@@ -5,7 +5,4 @@ web/data
 .git
 .gitignore
 *.md
-deploy-web.sh
-install-systemd.sh
-avemujica-web.service
 extractor

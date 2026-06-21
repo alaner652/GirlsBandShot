@@ -5,7 +5,7 @@ export function SiteFooter() {
         <span>© 2026 <a href="https://alaner652.com" className="hover:text-foreground transition-colors">alaner652</a></span>
         <div className="flex gap-4">
           <a href="https://github.com/alaner652" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
-          <a href="https://github.com/alaner652/AveMujicaBot" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Source</a>
+          <a href="https://github.com/alaner652/GirlsBandShot" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Source</a>
         </div>
       </div>
     </footer>
