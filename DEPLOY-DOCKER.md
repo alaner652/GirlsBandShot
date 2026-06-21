@@ -43,6 +43,7 @@ docker compose up -d
 
 完成！開啟 `http://your-server-ip:3000`
 
+
 ---
 ## 管理指令
 
@@ -58,29 +59,11 @@ docker compose restart
 
 # 停止服務
 docker compose down
-```
 
-### 更新專案（保留影片）
-
-```bash
-# 使用自動更新腳本（推薦）
-./update.sh
-```
-
-腳本會自動：
-1. ✅ 檢查未提交的變更
-2. ✅ 確認影片目錄被保護
-3. ✅ 拉取最新代碼（`git pull`）
-4. ✅ 重建並重啟容器
-5. ✅ 驗證影片檔案完好
-
-**手動更新**：
-```bash
+# 更新專案
 git pull
 docker compose up -d --build
 ```
-
-💡 **注意**：影片檔案在 `web/data/*/videos/` 已被 `.gitignore` 排除，執行 `git pull` 時不會被刪除。
 
 ---
 
@@ -93,7 +76,7 @@ docker compose up -d --build
 mkdir -p web/data/ave-mujica/videos
 
 # 從本機上傳
-scp video.mp4 user@server:~/GirlsBandShot/web/data/ave-mujica/videos/
+scp video.mp4 user@server:~/AveMujicaBot/web/data/ave-mujica/videos/
 
 # 重啟服務
 docker compose restart
@@ -103,44 +86,22 @@ docker compose restart
 
 ---
 
-## 使用 Nginx 反向代理（可選）
+## 使用 Nginx 反向代理
 
-如果需要：
-- 使用 80/443 port（不用加 :3000）
-- 綁定域名
-- 設定 HTTPS/SSL
-
-### 自動設定（推薦）
+### 1. 安裝 Nginx
 
 ```bash
-# 在 VM 上執行
-sudo ./setup-nginx.sh
+sudo apt install -y nginx certbot python3-certbot-nginx
 ```
 
-腳本會自動：
-1. ✅ 安裝 Nginx
-2. ✅ 建立反向代理設定
-3. ✅ 詢問是否設定 SSL（Let's Encrypt）
-4. ✅ 重啟服務
+### 2. 設定 Nginx
 
-### 手動設定
+建立 `/etc/nginx/sites-available/avemujica`：
 
-<details>
-<summary>展開查看手動設定步驟</summary>
-
-```bash
-# 1. 安裝 Nginx
-sudo apt install -y nginx
-
-# 2. 建立設定檔
-sudo nano /etc/nginx/sites-available/girlsbandshot
-```
-
-內容：
 ```nginx
 server {
     listen 80;
-    server_name your-domain.com;  # 或使用 _（任意 IP/域名）
+    server_name girls-band-shot.alaner652.com;
 
     location / {
         proxy_pass http://localhost:3000;
@@ -154,16 +115,16 @@ server {
 ```
 
 ```bash
-# 3. 啟用設定
-sudo ln -s /etc/nginx/sites-available/girlsbandshot /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/avemujica /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
+```
 
-# 4. 設定 SSL（可選）
-sudo apt install -y certbot python3-certbot-nginx
+### 3. 設定 SSL
+
+```bash
 sudo certbot --nginx -d your-domain.com
 ```
-</details>
 
 ---
 
