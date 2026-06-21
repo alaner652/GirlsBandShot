@@ -19,6 +19,9 @@ export async function GET(req: NextRequest) {
   if (!series) {
     return NextResponse.json({ error: "no series available" }, { status: 404 });
   }
+  if (!available.includes(series)) {
+    return NextResponse.json({ error: "invalid series" }, { status: 400 });
+  }
 
   const cacheKey = searchCacheKey(series, keyword, episode, page, limit);
   const cached = searchCache.get(cacheKey) as SearchPayload | undefined;

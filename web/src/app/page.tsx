@@ -26,12 +26,11 @@ export default function Home() {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl w-full pt-8">
           {[
-            { icon: "🔍", title: "關鍵字搜尋", desc: "輸入任意台詞，支援全 13 集" },
-            { icon: "🖼️", title: "即時截圖", desc: "ffmpeg 從原始影片截幀，LRU cache 加速" },
-            { icon: "🎞️", title: "GIF 生成", desc: "一鍵生成字幕片段動圖" },
+            { title: "關鍵字搜尋", desc: "輸入任意台詞，支援全 13 集" },
+            { title: "即時截圖", desc: "ffmpeg 從原始影片截幀，LRU cache 加速" },
+            { title: "GIF 生成", desc: "一鍵生成字幕片段動圖" },
           ].map((f) => (
             <div key={f.title} className="border rounded-xl p-4 text-left space-y-1">
-              <div className="text-2xl">{f.icon}</div>
               <p className="font-medium text-sm">{f.title}</p>
               <p className="text-xs text-muted-foreground">{f.desc}</p>
             </div>

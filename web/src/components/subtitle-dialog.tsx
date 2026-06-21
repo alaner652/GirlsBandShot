@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Check, ClipboardCopy, Download } from "lucide-react";
+import { Check, ClipboardCopy, Download, Link } from "lucide-react";
 import { useState } from "react";
 import type { SubtitleResult } from "@/components/subtitle-card";
 
@@ -18,6 +18,7 @@ export function SubtitleDialog({ result, onClose }: Props) {
   const [gifLoaded, setGifLoaded] = useState(false);
   const [copying, setCopying] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedUrl, setCopiedUrl] = useState(false);
 
   if (!result) return null;
 
@@ -37,13 +38,19 @@ export function SubtitleDialog({ result, onClose }: Props) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } catch {
-      // fallback: copy URL
       await navigator.clipboard.writeText(window.location.origin + result!.image_url);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     } finally {
       setCopying(false);
     }
+  }
+
+  function handleCopyUrl() {
+    const url = window.location.origin + result!.image_url;
+    navigator.clipboard.writeText(url);
+    setCopiedUrl(true);
+    setTimeout(() => setCopiedUrl(false), 1500);
   }
 
   function handleDownloadGif() {
@@ -61,6 +68,7 @@ export function SubtitleDialog({ result, onClose }: Props) {
           setShowGif(false);
           setGifLoaded(false);
           setCopied(false);
+          setCopiedUrl(false);
           onClose();
         }
       }}
@@ -105,6 +113,16 @@ export function SubtitleDialog({ result, onClose }: Props) {
             </span>
 
             <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleCopyUrl}
+                className="gap-1.5"
+              >
+                {copiedUrl ? <Check size={14} /> : <Link size={14} />}
+                {copiedUrl ? "已複製" : "複製圖片 URL"}
+              </Button>
+
               {!showGif ? (
                 <Button
                   variant="outline"
