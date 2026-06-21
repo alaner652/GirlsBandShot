@@ -86,48 +86,6 @@ docker compose restart
 
 ---
 
-## 使用 Nginx 反向代理
-
-### 1. 安裝 Nginx
-
-```bash
-sudo apt install -y nginx certbot python3-certbot-nginx
-```
-
-### 2. 設定 Nginx
-
-建立 `/etc/nginx/sites-available/avemujica`：
-
-```nginx
-server {
-    listen 80;
-    server_name girls-band-shot.alaner652.com;
-
-    location / {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_read_timeout 300s;
-    }
-}
-```
-
-```bash
-sudo ln -s /etc/nginx/sites-available/avemujica /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
-```
-
-### 3. 設定 SSL
-
-```bash
-sudo certbot --nginx -d your-domain.com
-```
-
----
-
 ## 疑難排解
 
 ### 檢查容器狀態
