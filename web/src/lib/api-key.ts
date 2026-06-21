@@ -33,3 +33,31 @@ export const V1_LIMITS = {
   image: 100,
   gif: 10,
 } as const;
+
+export type AuthResult =
+  | { ok: true; remaining: number }
+  | { ok: false; response: Response };
+
+export function requireApiKey(req: NextRequest, resource: keyof typeof V1_LIMITS): AuthResult {
+  const { valid, key } = validateApiKey(req);
+  if (!valid) {
+    return {
+      ok: false,
+      response: Response.json(
+        { error: "Missing or invalid API key", hint: "Provide X-Api-Key header" },
+        { status: 401 }
+      ),
+    };
+  }
+  const { ok, remaining } = rateLimitV1(key!, resource, V1_LIMITS[resource]);
+  if (!ok) {
+    return {
+      ok: false,
+      response: Response.json(
+        { error: "Rate limit exceeded" },
+        { status: 429, headers: { "Retry-After": "3600", "X-RateLimit-Remaining": "0" } }
+      ),
+    };
+  }
+  return { ok: true, remaining };
+}

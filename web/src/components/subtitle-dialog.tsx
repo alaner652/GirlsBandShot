@@ -47,7 +47,7 @@ export function SubtitleDialog({ result, onClose }: Props) {
   }
 
   function handleCopyUrl() {
-    const url = window.location.origin + result!.image_url;
+    const url = window.location.origin + (showGif ? result!.gif_url : result!.image_url);
     navigator.clipboard.writeText(url);
     setCopiedUrl(true);
     setTimeout(() => setCopiedUrl(false), 1500);
@@ -120,7 +120,7 @@ export function SubtitleDialog({ result, onClose }: Props) {
                 className="gap-1.5"
               >
                 {copiedUrl ? <Check size={14} /> : <Link size={14} />}
-                {copiedUrl ? "已複製" : "複製圖片 URL"}
+                {copiedUrl ? "已複製" : showGif ? "複製 GIF URL" : "複製圖片 URL"}
               </Button>
 
               {!showGif ? (
