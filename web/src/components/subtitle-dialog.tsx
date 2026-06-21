@@ -47,7 +47,9 @@ export function SubtitleDialog({ result, onClose }: Props) {
   }
 
   function handleCopyUrl() {
-    const url = window.location.origin + (showGif ? result!.gif_url : result!.image_url);
+    const gifUrl = result!.gif_url.replace(/\/?$/, ".gif");
+    const imgUrl = result!.image_url.replace(/\/?$/, ".jpg");
+    const url = window.location.origin + (showGif ? gifUrl : imgUrl);
     navigator.clipboard.writeText(url);
     setCopiedUrl(true);
     setTimeout(() => setCopiedUrl(false), 1500);

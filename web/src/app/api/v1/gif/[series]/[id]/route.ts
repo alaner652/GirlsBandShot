@@ -11,7 +11,8 @@ export async function GET(
   const auth = requireApiKey(req, "gif");
   if (!auth.ok) return auth.response;
 
-  const { series, id } = await params;
+  const { series, id: rawId } = await params;
+  const id = rawId.replace(/\.gif$/, "");
   const buf = await getGifBuffer(series, id);
   if (!buf) return Response.json({ error: "not found" }, { status: 404 });
   return new Response(new Uint8Array(buf), {

@@ -7,7 +7,8 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ series: string; id: string }> }
 ) {
-  const { series, id } = await params;
+  const { series, id: rawId } = await params;
+  const id = rawId.replace(/\.gif$/, "");
   const buf = await getGifBuffer(series, id);
   if (!buf) return Response.json({ error: "not found" }, { status: 404 });
   return new Response(new Uint8Array(buf), {

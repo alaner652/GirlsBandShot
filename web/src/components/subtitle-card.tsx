@@ -27,7 +27,7 @@ export function SubtitleCard({ result, onClick }: Props) {
 
   function handleCopy(e: React.MouseEvent) {
     e.stopPropagation();
-    navigator.clipboard.writeText(window.location.origin + result.image_url);
+    navigator.clipboard.writeText(window.location.origin + result.image_url + ".jpg");
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   }
