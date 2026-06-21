@@ -34,35 +34,41 @@ export function SubtitleCard({ result, onClick }: Props) {
 
   return (
     <div
-      className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group bg-muted"
+      className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
       onClick={() => onClick(result)}
     >
-      {!imgLoaded && <Skeleton className="absolute inset-0 rounded-none" />}
+      {!imgLoaded && (
+        <div className="absolute inset-0 bg-muted">
+          <Skeleton className="absolute inset-0 rounded-none" />
+        </div>
+      )}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={result.image_url}
         alt={result.text}
-        className="absolute inset-0 w-full h-full object-cover"
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-200 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
         loading="lazy"
         onLoad={() => setImgLoaded(true)}
       />
 
-      {/* hover overlay */}
-      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex flex-col justify-between p-2.5">
-        <div className="flex justify-between items-start gap-1">
-          <span className="text-white text-xs font-mono bg-black/40 rounded px-1.5 py-0.5">
-            EP {result.episode_id} · {result.timestamp}
-          </span>
-          <button
-            onClick={handleCopy}
-            className="p-1 rounded bg-black/40 text-white shrink-0"
-            title="複製文字"
-          >
-            {copied ? <Check size={12} /> : <Copy size={12} />}
-          </button>
+      {/* hover overlay — only after image loaded */}
+      {imgLoaded && (
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-150 flex flex-col justify-between p-2.5">
+          <div className="flex justify-between items-start gap-1">
+            <span className="text-white text-xs font-mono bg-black/40 rounded px-1.5 py-0.5">
+              EP {result.episode_id} · {result.timestamp}
+            </span>
+            <button
+              onClick={handleCopy}
+              className="p-1 rounded bg-black/40 text-white shrink-0"
+              title="複製圖片 URL"
+            >
+              {copied ? <Check size={12} /> : <Copy size={12} />}
+            </button>
+          </div>
+          <p className="text-white text-xs line-clamp-2 leading-relaxed">{result.text}</p>
         </div>
-        <p className="text-white text-xs line-clamp-2 leading-relaxed">{result.text}</p>
-      </div>
+      )}
     </div>
   );
 }
