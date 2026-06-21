@@ -15,7 +15,7 @@ const EPISODES = ["01","02","03","04","05","06","07","08","09","10","11","12","1
 
 function SkeletonGrid() {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4">
       {Array.from({ length: LIMIT }).map((_, i) => (
         <Skeleton key={i} className="aspect-video w-full rounded-lg" />
       ))}
@@ -181,7 +181,7 @@ function SearchContent() {
         {!loading && searched && results.length === 0 && <NoResults keyword={keyword} />}
 
         {!loading && results.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 animate-in fade-in duration-200">
+          <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 animate-in fade-in duration-200">
             {results.map((r) => (
               <SubtitleCard key={r.id} result={r} onClick={openResult} />
             ))}
