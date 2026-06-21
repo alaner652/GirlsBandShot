@@ -145,7 +145,7 @@ success "Nginx 已重啟並設定為開機自啟"
 # ── SSL 設定（可選）──────────────────────────────────────────────────────────
 if [ "$USE_DOMAIN" = true ]; then
   echo ""
-  read -p "$(echo -e ${BOLD}是否要設定 HTTPS/SSL (Let\'s Encrypt)？[y/N]${NC} )" -n 1 -r
+  read -p "$(echo -e ${BOLD}是否要設定 HTTPS/SSL \(Let\'s Encrypt\)？[y/N]${NC} )" -n 1 -r
   echo
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     header "設定 SSL"
