@@ -14,24 +14,24 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "雞狗查圖 — Ave Mujica 字幕截圖搜尋",
-    template: "%s | 雞狗查圖",
+    default: "一句一幀 — 少女樂隊字幕截圖搜尋",
+    template: "%s | 一句一幀",
   },
-  description: "搜尋 Ave Mujica 動畫字幕，即時生成截圖與 GIF。輸入一句台詞，找到那個畫面。",
-  keywords: ["Ave Mujica", "字幕", "截圖", "GIF", "BanG Dream", "搜尋"],
+  description: "搜尋少女樂隊動畫字幕，即時生成截圖與 GIF。輸入一句台詞，找到那個畫面。",
+  keywords: ["少女樂隊", "BanG Dream", "Ave Mujica", "YUME∞MITA", "字幕", "截圖", "GIF", "搜尋"],
   authors: [{ name: "alaner652", url: "https://alaner652.com" }],
   creator: "alaner652",
   openGraph: {
     type: "website",
     locale: "zh_TW",
-    siteName: "雞狗查圖",
-    title: "雞狗查圖 — Ave Mujica 字幕截圖搜尋",
-    description: "搜尋 Ave Mujica 動畫字幕，即時生成截圖與 GIF。",
+    siteName: "一句一幀",
+    title: "一句一幀 — 少女樂隊字幕截圖搜尋",
+    description: "搜尋少女樂隊動畫字幕，即時生成截圖與 GIF。",
   },
   twitter: {
     card: "summary_large_image",
-    title: "雞狗查圖 — Ave Mujica 字幕截圖搜尋",
-    description: "搜尋 Ave Mujica 動畫字幕，即時生成截圖與 GIF。",
+    title: "一句一幀 — 少女樂隊字幕截圖搜尋",
+    description: "搜尋少女樂隊動畫字幕，即時生成截圖與 GIF。",
     creator: "@alaner652",
   },
   robots: { index: true, follow: true },
