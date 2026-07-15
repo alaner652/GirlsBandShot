@@ -11,7 +11,17 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 
 const LIMIT = 24;
-const EPISODES = ["01","02","03","04","05","06","07","08","09","10","11","12","13"];
+
+interface SeriesMeta {
+  slug: string;
+  title: string;
+  shortTitle?: string;
+  episodes?: number;
+}
+
+function episodeList(count: number): string[] {
+  return Array.from({ length: count }, (_, i) => String(i + 1).padStart(2, "0"));
+}
 
 function SkeletonGrid() {
   return (
@@ -39,7 +49,7 @@ function SearchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [seriesList, setSeriesList] = useState<string[]>([]);
+  const [seriesList, setSeriesList] = useState<SeriesMeta[]>([]);
   const [keyword, setKeyword] = useState(() => searchParams.get("keyword") ?? "");
   const [series, setSeries] = useState(() => searchParams.get("series") ?? "");
   const [episode, setEpisode] = useState(() => searchParams.get("episode") ?? "");
@@ -52,14 +62,16 @@ function SearchContent() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const totalPages = Math.ceil(total / LIMIT);
+  const currentSeries = seriesList.find((s) => s.slug === series);
+  const episodes = episodeList(currentSeries?.episodes ?? 13);
 
   useEffect(() => {
     fetch("/api/series")
       .then((r) => r.json())
       .then((data) => {
-        const list: string[] = data.series ?? [];
+        const list: SeriesMeta[] = data.series ?? [];
         setSeriesList(list);
-        if (!series && list.length > 0) setSeries(list[0]);
+        if (!series && list.length > 0) setSeries(list[0].slug);
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -150,7 +162,7 @@ function SearchContent() {
                 className="flex-1 sm:flex-none border rounded-md px-3 text-sm bg-background h-9 min-w-0"
               >
                 {seriesList.map((s) => (
-                  <option key={s} value={s}>{s}</option>
+                  <option key={s.slug} value={s.slug}>{s.shortTitle ?? s.title}</option>
                 ))}
               </select>
             )}
@@ -160,7 +172,7 @@ function SearchContent() {
               className="flex-1 sm:flex-none border rounded-md px-3 text-sm bg-background h-9 min-w-0"
             >
               <option value="">全部集數</option>
-              {EPISODES.map((ep) => (
+              {episodes.map((ep) => (
                 <option key={ep} value={ep}>EP {ep}</option>
               ))}
             </select>

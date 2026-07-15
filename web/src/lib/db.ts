@@ -31,6 +31,30 @@ export function listSeries(): string[] {
   });
 }
 
+export interface SeriesMeta {
+  slug: string;
+  title: string;
+  shortTitle?: string;
+  year?: number;
+  episodes?: number;
+  source?: string;
+  description?: string;
+}
+
+export function getSeriesMeta(slug: string): SeriesMeta {
+  const metaPath = path.join(dataBase(), slug, "meta.json");
+  try {
+    const raw = JSON.parse(fs.readFileSync(metaPath, "utf-8"));
+    return { slug, title: raw.title ?? slug, ...raw };
+  } catch {
+    return { slug, title: slug };
+  }
+}
+
+export function listSeriesMeta(): SeriesMeta[] {
+  return listSeries().map(getSeriesMeta);
+}
+
 export interface SubtitleRow {
   id: string;
   episode_id: string;

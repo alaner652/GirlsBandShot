@@ -1,8 +1,8 @@
-import { listSeries } from "@/lib/db";
+import { listSeriesMeta } from "@/lib/db";
 
 export const runtime = "nodejs";
 
 export async function GET() {
-  const series = listSeries();
+  const series = listSeriesMeta();
   return Response.json({ series });
 }

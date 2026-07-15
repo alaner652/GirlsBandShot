@@ -9,6 +9,7 @@ extraction:
   coarse_step: 15        # 粗掃步距（幀）
   similarity_threshold: 0.2
   max_repeats: 3
+  end_buffer_seconds: 1.5   # 字幕消失後多留的尾巴秒數（緊接下一句時自動歸零）
 
 image:
   resolution: [1920, 1080]

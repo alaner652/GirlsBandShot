@@ -11,6 +11,7 @@ class Config:
     coarse_step: int
     similarity_threshold: float
     max_repeats: int
+    end_buffer_seconds: float
     image_resolution: tuple[int, int]
     supabase_bucket: str
 
@@ -24,6 +25,7 @@ class Config:
             coarse_step=d["extraction"]["coarse_step"],
             similarity_threshold=d["extraction"]["similarity_threshold"],
             max_repeats=d["extraction"]["max_repeats"],
+            end_buffer_seconds=d["extraction"].get("end_buffer_seconds", 1.5),
             image_resolution=tuple(d["image"]["resolution"]),
             supabase_bucket=d["supabase"]["bucket"],
         )
