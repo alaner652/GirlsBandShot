@@ -51,3 +51,6 @@ Thumbs.db
 ave-mujica-api/
 Ave-Mujica-Bot/
 ave-mujica-subtitle-extractor/
+
+# Deploy secrets
+deploy.env
