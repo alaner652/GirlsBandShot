@@ -165,7 +165,12 @@ def download(
     if url:
         download_url(url, resolved_videos)
     else:
-        download_from_csv(csv_path or "yt-to-mp4.csv", resolved_videos)
+        if not csv_path:
+            if not series:
+                console.print("[red]請指定 --csv <路徑> 或 --series <系列>（預設讀 perload/<系列>/list.csv）。[/]")
+                raise typer.Exit(1)
+            csv_path = f"perload/{series}/list.csv"
+        download_from_csv(csv_path, resolved_videos)
 
 
 @app.command()

@@ -17,7 +17,7 @@ GirlsBandShot/
             └── subtitles.db
 ```
 
-影片保留在本機／伺服器，截圖與 GIF 由 ffmpeg 即時生成。DB 只存文字、時間軸、影片相對路徑。**DB 已納入版本控管，clone 即可搜尋。**
+影片保留在本機／伺服器，截圖與 GIF 由 ffmpeg 即時生成。DB 只存文字、時間軸、影片相對路徑。**DB 與影片不進 git，由 `deploy.sh data` 以 rsync 推送到伺服器。**
 
 ## 快速開始
 
@@ -29,7 +29,7 @@ GirlsBandShot/
 mkdir -p web/data/ave-mujica/videos
 # 或用 extractor 下載
 cd extractor && python -m extractor.cli download \
-  --csv yt-to-mp4.csv --series ave-mujica --data-dir ../web/data
+  --series ave-mujica --data-dir ../web/data   # 讀 perload/ave-mujica/list.csv
 ```
 
 ### 2. Extractor（Python）

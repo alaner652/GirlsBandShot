@@ -34,8 +34,10 @@ brew install ffmpeg            # macOS
 # 單一 URL
 python -m extractor.cli download --url "https://youtube.com/watch?v=..."
 
-# 從 CSV 批次下載（格式：每行一個 URL）
-python -m extractor.cli download --csv yt-to-mp4.csv
+# 批次下載（讀 perload/<系列>/list.csv，每行一個 URL）
+python -m extractor.cli download --series mygo
+# 或指定任意清單：
+python -m extractor.cli download --csv perload/mygo/list.csv
 ```
 
 ### 擷取字幕
