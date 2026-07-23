@@ -4,14 +4,14 @@ set -euo pipefail
 # ── 一鍵部署到 VM ──────────────────────────────────────────────────────────────
 #
 # 兩條通道：
-#   code   程式碼 + subtitles.db + meta.json  → git push / git pull + rebuild
-#   video  影片 (web/data/*/videos/*.mp4)      → rsync 增量推送（不走 git）
+#   code   程式碼 + meta.json          → git push / git pull + rebuild
+#   data   subtitles.db + 影片          → rsync 增量推送（不走 git）
 #
 # 用法：
-#   ./deploy.sh                 完整部署（code + video）
-#   ./deploy.sh code            只更新程式碼／字幕索引（git pull + rebuild）
-#   ./deploy.sh video           只 rsync 所有系列影片，然後 restart
-#   ./deploy.sh video yumemita  只 rsync 指定系列影片
+#   ./deploy.sh                 完整部署（code + data）
+#   ./deploy.sh code            只更新程式碼（git pull + rebuild）
+#   ./deploy.sh data            rsync 所有系列的 db + 影片，然後 restart
+#   ./deploy.sh data yumemita   只 rsync 指定系列
 #   ./deploy.sh restart         只重啟遠端服務
 #
 # 連線設定放在 deploy.env（見 deploy.env.example）。
@@ -43,7 +43,7 @@ deploy_code() {
   if [ -n "$(git status --porcelain)" ]; then
     warn "本機有未提交的變更："
     git status --short | sed 's/^/    /'
-    warn "只有已 commit 的內容會被部署（subtitles.db 也要 commit 才會上去）"
+    warn "只有已 commit 的內容會走 code 通道（db／影片走 data 通道，與此無關）"
   fi
 
   local branch; branch=$(git rev-parse --abbrev-ref HEAD)
@@ -55,8 +55,8 @@ deploy_code() {
   ok "遠端已更新並重建"
 }
 
-deploy_video() {
-  step "rsync 影片到 VM"
+deploy_data() {
+  step "rsync 資料到 VM（subtitles.db + 影片）"
 
   local series_list
   if [ -n "${SERIES_ARG}" ]; then
@@ -64,21 +64,23 @@ deploy_video() {
   elif [ -n "${DEPLOY_SERIES:-}" ]; then
     series_list="$DEPLOY_SERIES"
   else
-    # 自動偵測本機有 videos 的系列
-    series_list=$(find web/data -maxdepth 2 -type d -name videos 2>/dev/null \
-                    | sed 's#web/data/##; s#/videos##' | tr '\n' ' ')
+    # 自動偵測本機所有系列（web/data/*/）
+    series_list=$(find web/data -mindepth 1 -maxdepth 1 -type d 2>/dev/null \
+                    | sed 's#web/data/##' | tr '\n' ' ')
   fi
-  [ -n "$series_list" ] || die "找不到任何影片系列（web/data/*/videos/）"
+  [ -n "$series_list" ] || die "找不到任何系列（web/data/*/）"
 
   for s in $series_list; do
-    local src="web/data/$s/videos/"
+    local src="web/data/$s/"
     [ -d "$src" ] || { warn "跳過 $s：本機無 $src"; continue; }
-    local count; count=$(find "$src" -name '*.mp4' | wc -l | tr -d ' ')
-    echo -e "  → ${BOLD}$s${NC}（$count 個 mp4）"
-    remote "mkdir -p web/data/$s/videos" >/dev/null
-    rsync -avz --progress --partial \
-      "$src" "$DEPLOY_SSH:$DEPLOY_DIR/web/data/$s/videos/"
-    ok "$s 影片已同步"
+    local count; count=$(find "$src/videos" -name '*.mp4' 2>/dev/null | wc -l | tr -d ' ')
+    local hasdb="無 db"; [ -f "$src/subtitles.db" ] && hasdb="含 db"
+    echo -e "  → ${BOLD}$s${NC}（$hasdb，$count 個 mp4）"
+    remote "mkdir -p web/data/$s" >/dev/null
+    # 傳 subtitles.db 與 videos/；meta.json 走 git，不重複推
+    rsync -avz --progress --partial --exclude 'meta.json' \
+      "$src" "$DEPLOY_SSH:$DEPLOY_DIR/web/data/$s/"
+    ok "$s 資料已同步"
   done
 }
 
@@ -90,11 +92,11 @@ restart_remote() {
 
 # ── 執行 ──────────────────────────────────────────────────────────────────────
 case "$MODE" in
-  all)     deploy_code; deploy_video; restart_remote ;;
+  all)     deploy_code; deploy_data; restart_remote ;;
   code)    deploy_code ;;
-  video)   deploy_video; restart_remote ;;
+  data)    deploy_data; restart_remote ;;
   restart) restart_remote ;;
-  *)       die "未知模式：$MODE（可用 all | code | video | restart）" ;;
+  *)       die "未知模式：$MODE（可用 all | code | data | restart）" ;;
 esac
 
 echo -e "\n${GREEN}${BOLD}✓ 部署完成${NC}\n"

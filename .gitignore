@@ -10,6 +10,7 @@ extractor/output/
 extractor/logs/
 extractor/nohup.out
 web/data/*/videos/
+web/data/*/subtitles.db
 
 # Node
 web/node_modules/
