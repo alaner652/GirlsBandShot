@@ -55,3 +55,4 @@ ave-mujica-subtitle-extractor/
 
 # Deploy secrets
 deploy.env
+web/data/*/subtitles.db.bak-*
