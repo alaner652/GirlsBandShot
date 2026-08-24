@@ -21,6 +21,8 @@ export function getDb(series: string): Database.Database {
 export function listSeries(): string[] {
   const base = dataBase();
   if (!fs.existsSync(base)) return [];
+  // 排序過才穩定：readdir 在 ext4 是 hash 順序，VM 上跟本機不一定一樣，
+  // 而前端和 /api/search 都拿 [0] 當預設系列。
   return fs.readdirSync(base).filter((name) => {
     try {
       return fs.statSync(path.join(base, name)).isDirectory() &&
@@ -28,7 +30,7 @@ export function listSeries(): string[] {
     } catch {
       return false;
     }
-  });
+  }).sort();
 }
 
 export interface SeriesMeta {

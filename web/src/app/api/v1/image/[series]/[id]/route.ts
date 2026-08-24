@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { requireApiKey } from "@/lib/api-key";
 import { getFrameBuffer } from "@/lib/media";
+import { mediaResponse } from "@/lib/media-response";
 
 export const runtime = "nodejs";
 
@@ -12,13 +13,7 @@ export async function GET(
   if (!auth.ok) return auth.response;
 
   const { series, id } = await params;
-  const buf = await getFrameBuffer(series, id);
-  if (!buf) return Response.json({ error: "not found" }, { status: 404 });
-  return new Response(new Uint8Array(buf), {
-    headers: {
-      "Content-Type": "image/jpeg",
-      "Cache-Control": "public, max-age=3600",
-      "X-RateLimit-Remaining": String(auth.remaining),
-    },
+  return mediaResponse(() => getFrameBuffer(series, id), "image/jpeg", {
+    "X-RateLimit-Remaining": String(auth.remaining),
   });
 }

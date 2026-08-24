@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { requireApiKey } from "@/lib/api-key";
 import { getGifBuffer } from "@/lib/media";
+import { mediaResponse } from "@/lib/media-response";
 
 export const runtime = "nodejs";
 
@@ -13,13 +14,7 @@ export async function GET(
 
   const { series, id: rawId } = await params;
   const id = rawId.replace(/\.gif$/, "");
-  const buf = await getGifBuffer(series, id);
-  if (!buf) return Response.json({ error: "not found" }, { status: 404 });
-  return new Response(new Uint8Array(buf), {
-    headers: {
-      "Content-Type": "image/gif",
-      "Cache-Control": "public, max-age=3600",
-      "X-RateLimit-Remaining": String(auth.remaining),
-    },
+  return mediaResponse(() => getGifBuffer(series, id), "image/gif", {
+    "X-RateLimit-Remaining": String(auth.remaining),
   });
 }
